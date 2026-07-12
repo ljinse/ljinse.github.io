@@ -90,6 +90,35 @@
     margin-top: 16px;
   }
 
+  .data-card {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 20px;
+    background: #fafafa;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+  }
+
+  .data-label {
+    font-size: 15px;
+    color: var(--text);
+  }
+
+  .data-value {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .data-note {
+    font-size: 13px;
+    color: var(--muted);
+    margin: 14px 0 0;
+  }
+
   footer {
     padding: 40px 0 60px;
     border-top: 1px solid var(--line);
@@ -119,11 +148,38 @@
           느리더라도 꾸준하게, 그리고 어디서든 일할 수 있는 자유를 지키는 것이 목표입니다.
         </p>
       </section>
+
+      <section>
+        <h2>Live Data</h2>
+        <div class="data-card">
+          <span class="data-label">마지막 업데이트</span>
+          <span class="data-value" id="updated-at">불러오는 중...</span>
+        </div>
+        <p class="data-note" id="data-note">
+          GitHub Actions가 매일 자동으로 실행되어 이 시각을 갱신합니다. (지금은 예시로 현재 시각만 기록하며, 추후 실제 크롤링 데이터로 대체될 예정입니다)
+        </p>
+      </section>
     </main>
 
     <footer>
       &copy; 2026 디지털노마드
     </footer>
   </div>
+
+  <script>
+    fetch('data.json', { cache: 'no-store' })
+      .then((res) => res.json())
+      .then((data) => {
+        const el = document.getElementById('updated-at');
+        const date = new Date(data.updatedAt);
+        el.textContent = date.toLocaleString('ko-KR', {
+          dateStyle: 'medium',
+          timeStyle: 'short',
+        });
+      })
+      .catch(() => {
+        document.getElementById('updated-at').textContent = '불러오기 실패';
+      });
+  </script>
 </body>
 </html>
